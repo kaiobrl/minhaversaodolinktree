@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>linktree bio-me</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: sans-serif;
+            background: linear-gradient(135deg, #fff, #000);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        body.light {
+            background: linear-gradient(135deg, #f0f0f0, #e0e0e0);
+            color: #fff;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .profile img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            color: #fff;
+            font-size: 26px;
+        }
+
+        body.light h1 {
+            color: #000;
+        }
+
+        p {
+            color: #fff;
+            margin-bottom: 30px;
+        }
+
+        body.light p {
+            color: #000;
+        }
+
+        .links {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-bottom: 30px;
+        }
+
+        .link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: #fff;
+            color: #000;
+            text-decoration: none;
+            border-radius: 10px;
+            padding: 15px;
+            font-weight: 600;
+            transition: 0.2s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        body:not(.light) .link {
+            background: rgba(146, 146, 146, 0.1);
+            color: #fff;
+            border: 1px solid rgba(151, 151, 151, 0.2);
+        }
+
+        .link::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        body.light .link::before {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .link:hover::before {
+            opacity: 1;
+        }
+
+        .link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .footer {
+            font-size: 30px;
+            color: #fff;
+            font-size: 14px;
+        }
+
+        body.light .footer {
+            color: #000;
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 22px;
+            }
+
+            .link {
+                font-size: 15px;
+                padding: 12px;
+            }
+
+            .theme-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 18px;
+            }
+
+            .theme-btn {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                width: 45px;
+                border: none;
+                border-radius: 50%;
+                font-size: 20px;
+                cursor: pointer;
+                background: rgba(255, 255, 255, 0.2);
+                color: #000;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: 0.2s;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <button class="theme-btn" id="themeToggle" aria-label="Toggle theme">
+        <i class="fas fa-sun"></i>
+    </button>
+
+    <div class="container">
+        <div class="profile">
+            <img id="profileImg" />
+            <h1 id="profileName"></h1>
+            <p id="profileBio"></p>
+        </div>
+
+        <div class="links" id="linksContainer"></div>
+        <div class="footer">@ 2025 All rights reserved</div>
+    </div>
+    <script>
+        const profile = {
+            name: "Kaio Gustavo",
+            bio: "Digital Creator | Developer | Designer.",
+            image: "img/profile.png",
+        }
+
+        const links = [
+            { title: "Portifoilo", url: "codingwithkaio.com", icon: "fas fa-briefcase" },
+            { title: "Whatsapp", url: "Whatsapp", icon: "fa-brands fa-whatsapp" },
+            { title: "Instagram", url: "instagram.com/codingwithkaio", icon: "fab fa-instagram" },
+            { title: "LinkedIn", url: "linkedin.com/in/codingwithkaio", icon: "fab fa-linkedin" },
+            { title: "GitHub", url: "github.com/codingwithkaio", icon: "fab fa-github" },
+        ]
+
+        document.getElementById('profileName').textContent = profile.name;
+        document.getElementById('profileBio').textContent = profile.bio;
+        document.getElementById('profileImg').src = profile.image;
+
+        const container = document.getElementById('linksContainer');
+        links.forEach((link) => {
+            container.innerHTML += `
+            <a class="link" href="${link.url}" target="_blank">
+                <i class="${link.icon}"></i><span>${link.title}</span>
+            </a>`;
+        });
+
+        const toggle = document.getElementById('themeToggle');
+        toggle.onclick = () => {
+            document.body.classList.toggle('light');
+            toggle.innerHTML = document.body.classList.contains('light')
+                ? '<i class="fas fa-moon"></i>'
+                : '<i class="fas fa-sun"></i>';
+        };
+    </script>
+
+</body>
+
+</html>
