@@ -14,19 +14,20 @@
         }
 
         body {
-            font-family: sans-serif;
-            background: linear-gradient(135deg, #fff, #000);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a, #000);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
             transition: background 0.3s, color 0.3s;
+            color: #fff;
         }
 
         body.light {
             background: linear-gradient(135deg, #f0f0f0, #e0e0e0);
-            color: #fff;
+            color: #000;
         }
 
         .container {
@@ -40,13 +41,21 @@
             height: 100px;
             border-radius: 50%;
             object-fit: cover;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
             margin-bottom: 15px;
+            border: 3px solid rgba(255, 255, 255, 0.2);
+        }
+
+        body.light .profile img {
+            border: 3px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         h1 {
             color: #fff;
             font-size: 26px;
+            margin-bottom: 10px;
+            font-weight: 700;
         }
 
         body.light h1 {
@@ -54,12 +63,14 @@
         }
 
         p {
-            color: #fff;
+            color: #ccc;
             margin-bottom: 30px;
+            font-size: 16px;
+            line-height: 1.5;
         }
 
         body.light p {
-            color: #000;
+            color: #555;
         }
 
         .links {
@@ -116,13 +127,12 @@
         }
 
         .footer {
-            font-size: 30px;
-            color: #fff;
+            color: #888;
             font-size: 14px;
         }
 
         body.light .footer {
-            color: #000;
+            color: #666;
         }
 
         .theme-btn {
@@ -141,6 +151,7 @@
             align-items: center;
             justify-content: center;
             transition: 0.2s;
+            z-index: 100;
         }
 
         body.light .theme-btn {
@@ -150,12 +161,16 @@
 
         .theme-btn:hover {
             transform: scale(1.1);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
         }
 
         @media (max-width: 480px) {
             h1 {
                 font-size: 22px;
+            }
+
+            p {
+                font-size: 14px;
             }
 
             .link {
@@ -179,48 +194,65 @@
 
     <div class="container">
         <div class="profile">
-            <img id="profileImg" />
+            <img id="profileImg" alt="Foto de perfil de Kaio Gustavo" />
             <h1 id="profileName"></h1>
             <p id="profileBio"></p>
         </div>
 
         <div class="links" id="linksContainer"></div>
-        <div class="footer">@ 2025 All rights reserved</div>
+        <div class="footer">© 2025 All rights reserved</div>
     </div>
+
     <script>
         const profile = {
             name: "Kaio Gustavo",
-            bio: "Digital Creator | Developer | Designer.",
+            bio: "Digital Creator | Developer | Designer",
             image: "img/profile.png",
-        }
+        };
 
         const links = [
-            { title: "Portifoilo", url: "codingwithkaio.com", icon: "fas fa-briefcase" },
-            { title: "Whatsapp", url: "Whatsapp", icon: "fa-brands fa-whatsapp" },
-            { title: "Instagram", url: "instagram.com/codingwithkaio", icon: "fab fa-instagram" },
-            { title: "LinkedIn", url: "linkedin.com/in/codingwithkaio", icon: "fab fa-linkedin" },
-            { title: "GitHub", url: "github.com/codingwithkaio", icon: "fab fa-github" },
-        ]
+            { title: "Portfólio", url: "https://codingwithkaio.com", icon: "fas fa-briefcase" },
+            { title: "Whatsapp", url: "https://wa.me/5585999999999", icon: "fa-brands fa-whatsapp" },
+            { title: "Instagram", url: "https://instagram.com/codingwithkaio", icon: "fab fa-instagram" },
+            { title: "Telegram", url: "https://t.me/codingwithkaio", icon: "fab fa-telegram" },
+            { title: "LinkedIn", url: "https://linkedin.com/in/codingwithkaio", icon: "fab fa-linkedin" },
+            { title: "GitHub", url: "https://github.com/codingwithkaio", icon: "fab fa-github" },
+        ];
 
+        // Carregar dados do perfil
         document.getElementById('profileName').textContent = profile.name;
         document.getElementById('profileBio').textContent = profile.bio;
         document.getElementById('profileImg').src = profile.image;
 
+        // Gerar links
         const container = document.getElementById('linksContainer');
         links.forEach((link) => {
-            container.innerHTML += `
-            <a class="link" href="${link.url}" target="_blank">
-                <i class="${link.icon}"></i><span>${link.title}</span>
-            </a>`;
+            const linkElement = document.createElement('a');
+            linkElement.className = 'link';
+            linkElement.href = link.url;
+            linkElement.target = '_blank';
+            linkElement.rel = 'noopener noreferrer';
+            linkElement.innerHTML = `<i class="${link.icon}"></i><span>${link.title}</span>`;
+            container.appendChild(linkElement);
         });
 
+        // Toggle tema
         const toggle = document.getElementById('themeToggle');
-        toggle.onclick = () => {
+
+        // Restaurar tema salvo
+        if (localStorage.getItem('theme') === 'light') {
+            document.body.classList.add('light');
+            toggle.innerHTML = '<i class="fas fa-moon"></i>';
+        }
+
+        toggle.addEventListener('click', () => {
             document.body.classList.toggle('light');
-            toggle.innerHTML = document.body.classList.contains('light')
+            const isLight = document.body.classList.contains('light');
+            toggle.innerHTML = isLight
                 ? '<i class="fas fa-moon"></i>'
                 : '<i class="fas fa-sun"></i>';
-        };
+            localStorage.setItem('theme', isLight ? 'light' : 'dark');
+        });
     </script>
 
 </body>
